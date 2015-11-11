@@ -11,12 +11,14 @@ public abstract class TargetObject implements IRenderable{
 	protected int x,y,z = 0;
 	protected int radius;
 	protected boolean destroyed = false;
-	protected int xSpeed ,ySpeed = 0;
+	protected int xSpeed, ySpeed = 0;
 	protected int movingType;
 	// 1 is normal, 2 is vertical only, 3 is horizontal only
 	
 	protected int xDestination;
 	protected int yDestination;
+	protected int xDistance;
+	protected int yDistance;
 	
 	protected boolean isPointerOver = false;
 
@@ -60,6 +62,8 @@ public abstract class TargetObject implements IRenderable{
 			reachDestination();
 		}
 		
+		x += xSpeed;
+		y += ySpeed;
 		// TODO - check out of screen
 		// TODO - how object create ?
 		// TODO - how object fade in ?
