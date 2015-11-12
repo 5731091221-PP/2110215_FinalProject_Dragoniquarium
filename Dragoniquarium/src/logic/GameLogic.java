@@ -42,7 +42,6 @@ public class GameLogic {
 		
 		for(TargetObject obj : onScreenObject) {
 			obj.move();
-			System.out.println("obj");
 			if (obj.y >= 900 ) {
 				obj.destroyed = true;
 			}
@@ -51,7 +50,8 @@ public class GameLogic {
 		spawnDelayCounter++;
 		if (spawnDelayCounter >= SPAWN_DELAY ) {
 			spawnDelayCounter = 0;
-			TargetObject egg = new Egg1(RandomUtility.random(0, 1000), 600, 10);
+//			TargetObject egg = new Egg1(RandomUtility.random(0, 1000), 600, 10);
+			TargetObject egg = new Dragon1(RandomUtility.random(0, 1000), 200, 10);
 			onScreenObject.add(egg);
 			RenderableHolder.getInstance().add(egg);
 		}
