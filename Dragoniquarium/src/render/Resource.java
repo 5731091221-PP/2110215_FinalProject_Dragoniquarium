@@ -21,6 +21,7 @@ public class Resource {
 			coinSound = Applet.newAudioClip((loader.getResource("res/coin.wav")).toURI().toURL());
 			
 		} catch (Exception e) {
+			System.err.println("Cannot load resource");
 			egg1Sprite = null;
 			coinSound = null;
 		}

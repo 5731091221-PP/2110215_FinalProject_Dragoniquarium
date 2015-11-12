@@ -8,11 +8,11 @@ import logic.RandomUtility;;
 
 public abstract class TargetObject implements IRenderable{
 
-	protected int x,y,z = 0;
+	protected int x,y,z;
 	protected int radius;
 	protected boolean destroyed = false;
 	protected int xSpeed, ySpeed = 0;
-	protected int movingType;
+//	protected int movingType;
 	// 1 is normal, 2 is vertical only, 3 is horizontal only
 	
 	protected int xDestination;
@@ -24,13 +24,15 @@ public abstract class TargetObject implements IRenderable{
 
 	protected int currentAction;
 	
-	public TargetObject(int radius, int movingType, int z) {
+	public TargetObject(int x, int y, int radius, int z) {
 		super();
+		this.x = x;
+		this.y = y;
 		this.z = z;
 		this.radius = radius;
 //		this.xSpeed = xSpeed;
 //		this.ySpeed = ySpeed;
-		this.movingType = movingType;
+//		this.movingType = movingType;
 		
 		//TODO - generate first destination - maybe in subclass
 		//TODO - how to fade in ?
@@ -41,7 +43,7 @@ public abstract class TargetObject implements IRenderable{
 	}
 	
 	public abstract void generateMovingDestination(int curX, int curY);
-//	public abstract void move();
+	public abstract void move();
 	public abstract void reachDestination();
 	
 	public boolean contains(int x,int y){
@@ -54,7 +56,7 @@ public abstract class TargetObject implements IRenderable{
 	
 	
 	
-	public void move(){
+/*	public void move(){
 		if(destroyed) return;
 		
 		if(contains(xDestination,yDestination)) {
@@ -68,7 +70,7 @@ public abstract class TargetObject implements IRenderable{
 		// TODO - how object create ?
 		// TODO - how object fade in ?
 
-	}
+	}*/
 
 	@Override
 	public int getZ() {
