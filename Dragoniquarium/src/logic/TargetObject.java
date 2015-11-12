@@ -8,23 +8,24 @@ import logic.RandomUtility;;
 
 public abstract class TargetObject implements IRenderable{
 
-	protected int x,y,z;
+	protected double x,y;
+	protected int z;
 	protected int radius;
 	protected boolean destroyed = false;
-	protected int xSpeed, ySpeed = 0;
+//	protected int xSpeed, ySpeed = 0;
 //	protected int movingType;
 	// 1 is normal, 2 is vertical only, 3 is horizontal only
 	
-	protected int xDestination;
-	protected int yDestination;
-	protected int xDistance;
-	protected int yDistance;
+	protected double xDestination;
+	protected double yDestination;
+//	protected int xDistance;
+//	protected int yDistance;
 	
 	protected boolean isPointerOver = false;
 
 	protected int currentAction;
 	
-	public TargetObject(int x, int y, int radius, int z) {
+	public TargetObject(double x, double y, int radius, int z) {
 		super();
 		this.x = x;
 		this.y = y;
@@ -42,11 +43,11 @@ public abstract class TargetObject implements IRenderable{
 		
 	}
 	
-	public abstract void generateMovingDestination(int curX, int curY);
+	public abstract void generateMovingDestination(double curX, double curY);
 	public abstract void move();
 	public abstract void reachDestination();
 	
-	public boolean contains(int x,int y){
+	public boolean contains(double x, double y){
 		return Math.hypot(x-this.x, y-this.y) <= radius+6;
 	}
 	

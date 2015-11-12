@@ -8,4 +8,7 @@ public class RandomUtility {
 		return (new Random()).nextInt(end - start + 1) + start;
 	}
 	
+	public static double random(double start, double end) {
+		return (new Random()).nextDouble()*(end - start) + start;
+	}
 }

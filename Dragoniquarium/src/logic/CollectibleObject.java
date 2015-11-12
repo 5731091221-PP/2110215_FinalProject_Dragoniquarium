@@ -9,20 +9,15 @@ public abstract class CollectibleObject extends TargetObject{
 	protected int timeSpent = 300;
 	protected boolean movingUp;
 	
-	public CollectibleObject(int x, int y, int radius, int z, int reward) {
+	public CollectibleObject(double x, double y, int radius, int z, int reward) {
 		super(x, y, radius, z);
-		// TODO Auto-generated constructor stub
 		this.reward = reward;
 		this.movingUp = true;
-//		this.xSpeed = 5;
-//		this.ySpeed = 0;
-		System.out.println("x = " + this.x + " y = " + this.y);
 		generateMovingDestination(this.x, this.y);
-		System.out.println("xDes = "+xDestination+ " yDes = "+yDestination);
 	}
 	
 	@Override
-	public void generateMovingDestination(int curX, int curY) {
+	public void generateMovingDestination(double curX, double curY) {
 //		System.out.println("In generate x = " + curX + " y = " + curY);
 		if(movingUp) {
 			xDestination = curX;
@@ -46,24 +41,17 @@ public abstract class CollectibleObject extends TargetObject{
 	
 	@Override
 	public void move() {
-		System.out.println("move");
 		if(destroyed) return;
 		
 		if(contains(xDestination,yDestination)) {
 			reachDestination();
-			System.out.println("reached");
 			return ;
 		}
-		System.out.println("current x,y = " + x +" " +y);
 		if(movingUp) {
-			System.out.println("move up");
 			y += (yDestination - y) * 0.05;
 		} else {
-			System.out.println("move down");
 			y += 2;
-			System.out.println("down");
 		}
-//		System.out.println("current x,y = " + x +" " +y);
 	}
 	
 	public void grab(PlayerStatus player){
