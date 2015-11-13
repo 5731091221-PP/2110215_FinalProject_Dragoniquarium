@@ -8,7 +8,6 @@ public class InputUtility {
 		if(key < 0 || key >= 256) return false;
 		return keyPressed[key];
 	}
-	
 	public static void setKeyPressed(int key, boolean pressed) {
 		if(key < 0 || key >= 256) return;
 		keyPressed[key] = pressed;
