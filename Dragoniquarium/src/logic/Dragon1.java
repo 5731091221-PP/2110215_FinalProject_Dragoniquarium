@@ -7,7 +7,7 @@ import render.Resource;
 public class Dragon1 extends DamageableObject {
 	
 	public Dragon1(int x, int y, int z) {
-		super(x, y, 20, z, 1, 1, 0);
+		super(x, y, 20, z, 2, 1, 0);
 		
 		// TODO Auto-generated constructor stub
 	}

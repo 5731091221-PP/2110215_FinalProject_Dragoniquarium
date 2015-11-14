@@ -6,7 +6,8 @@ public abstract class DamageableObject extends TargetObject {
 	protected int defense;
 	protected double speed;
 	
-	private boolean movingIn;
+//	private boolean movingIn;
+	protected boolean hasDestination;
 	
 	protected int state;
 	/*
@@ -26,11 +27,17 @@ public abstract class DamageableObject extends TargetObject {
 	private boolean isLeft;
 	
 	private int tickCountX = 0;
+	private double speedAddX = 0;
+	private double targetSpeedX = 0;
+	private boolean stableX = false;
+	private boolean speedRisingX = false;
+	private int risingTickX = 0;
+	private int tickNeedX = 0;
 	
 	private int tickCountY = 0;
 	private double speedAddY = 0;
 	private double targetSpeedY = 0;
-	private boolean stable = false;
+	private boolean stableY = false;
 	private boolean speedRisingY = false;
 	private int risingTickY = 0;
 	private int tickNeedY = 0;
@@ -44,48 +51,119 @@ public abstract class DamageableObject extends TargetObject {
 		
 		this.isLeft = RandomUtility.random(0, 1) == 0 ? true : false;
 		this.state = 1;
-		this.movingIn = true;
+//		this.movingIn = true;
 		generateFirstDestination();
 		this.speed = RandomUtility.random(0.005, 0.05);
 			
 	}
 	
+	public void setDestination(double xDes, double yDes) {
+		hasDestination = false;
+		this.xDestination = xDes;
+		this.yDestination = yDes;
+	}
+	
 	@Override
 	public void move() {
 		if(destroyed) return;
-		if(contains(xDestination,yDestination)) {
-			movingIn = false;
-			reachDestination();
-			return ;
-		}
-		if(movingIn) {
+		/*if(movingIn) {
 			
 			x += (xDestination - x) * speed;
 			y += (yDestination - y) * speed;
 			
 			return ;
 		}
+		*/
+		if(hasDestination) {
+			if(contains(xDestination,yDestination)) {
+//				movingIn = false;
+				hasDestination = false;
+				reachDestination();
+				return ;
+			}
+			
+			x += (xDestination - x) * speed;
+			y += (yDestination - y) * speed;
+			return ;
+		}
 		
+		
+		if( movingType == 1) {
+			calculateYaxis();
+		}
+		
+		calculateXaxis();
+		
+	}
+	
+	private void calculateXaxis(){
+		
+		if(tickCountX == tickNeedX) {
+			if(isLeft) {
+				targetSpeedX = RandomUtility.random(-4.0, -1.5);
+			} else {
+				targetSpeedX = RandomUtility.random(1.5, 4.0);
+			}
+			
+			risingTickX = RandomUtility.random(100, 150);
+			tickNeedX = 2*risingTickX + RandomUtility.random(100, 150);
+			speedAddX = targetSpeedX/risingTickX;
+			
+			speedRisingX = true;
+			stableX = false;
+			tickCountX = 0;
+			isLeft = !isLeft;
+		}
+		tickCountX++;
+		
+		if(tickCountX > 2*risingTickX) {
+			stableX = true;
+		} else if (tickCountX > risingTickX) {
+			speedRisingX = false;
+		}
+		
+		if(stableX) {
+			if(speedAddX > 0) {
+				xSpeed = 0.3;
+			} else {
+				xSpeed = -0.3;
+			}
+		} else if (speedRisingX){
+			xSpeed += speedAddX;
+		} else {
+			xSpeed -= speedAddX;
+		}
+		
+		x += xSpeed;
+		
+		if(x<20) {
+			x = 20;
+		} else if( x > 1000) {
+			x = 1000;
+		}
+	}
+	
+	private void calculateYaxis(){
 		
 		if(tickCountY == tickNeedY) {
-			targetSpeedY = RandomUtility.random(-3.0, 3.0);
-			risingTickY = RandomUtility.random(50, 100);
+			targetSpeedY = RandomUtility.random(-2.0, 2.0);
+			risingTickY = RandomUtility.random(100, 200);
 			tickNeedY = 2*risingTickY + RandomUtility.random(50, 100);
 			speedAddY = targetSpeedY/risingTickY;
 			
 			speedRisingY = true;
-			stable = false;
+			stableY = false;
 			tickCountY = 0;
 		}
 		tickCountY++;
 		
 		if(tickCountY > 2*risingTickY) {
-			stable = true;
+			stableY = true;
 		} else if (tickCountY > risingTickY) {
 			speedRisingY = false;
 		}
 		
-		if(stable) {
+		if(stableY) {
 			if(speedAddY > 0) {
 				ySpeed = 0.2;
 			} else {
@@ -97,15 +175,7 @@ public abstract class DamageableObject extends TargetObject {
 			ySpeed -= speedAddY;
 		}
 		
-		System.out.println(ySpeed + " " + speedAddY);
 		y += ySpeed;
-		
-		if(x<20) {
-			x = 20;
-		} else if( x > 1000) {
-			x = 1000;
-		}
-		
 		if(y < 20) {
 			if(tickCountY < 2*risingTickY) tickCountY = 2*risingTickY;
 			y = 20;
@@ -113,7 +183,6 @@ public abstract class DamageableObject extends TargetObject {
 			if(tickCountY < 2*risingTickY) tickCountY = 2*risingTickY;
 			y = 580;
 		}
-		
 	}
 	
 	private void generateFirstDestination() {
@@ -124,6 +193,7 @@ public abstract class DamageableObject extends TargetObject {
 			xDestination = RandomUtility.random(100, 900);
 			yDestination = 560;
 		}
+		hasDestination = true;
 	}
 	
 	private void generateSpeed() {
@@ -133,7 +203,7 @@ public abstract class DamageableObject extends TargetObject {
 	@Override
 	public void generateMovingDestination(double curX, double curY) {
 		// TODO check start and end point
-		this.speed = RandomUtility.random(0.005, 0.05);
+//		this.speed = RandomUtility.random(0.005, 0.05);
 		if (movingType == 1) {
 			xDestination = RandomUtility.random(Math.max(30, curX-200),Math.min(990, curX+200));
 			yDestination = RandomUtility.random(Math.max(40, curY-100), Math.min(500, curY+100));
@@ -142,12 +212,14 @@ public abstract class DamageableObject extends TargetObject {
 			yDestination = 560;
 		}
 		
+		hasDestination = true;
 	}
 
 	@Override
 	public void reachDestination() {
 		// TODO Auto-generated method stub
-		generateMovingDestination(x, y);
+//		generateMovingDestination(x, y);
+		
 	}
 	
 	public void hit() {
