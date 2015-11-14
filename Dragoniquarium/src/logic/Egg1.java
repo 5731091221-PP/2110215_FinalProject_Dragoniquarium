@@ -23,13 +23,11 @@ public class Egg1 extends CollectibleObject {
 
 	@Override
 	public void reachDestination() {
-		System.out.println("top");
 		if(movingUp) {
 			movingUp = false;
 			
 			generateMovingDestination(x, y);
 		} else {
-			System.out.println("destroy");
 			destroyed = true;
 		}	
 	}

@@ -20,7 +20,6 @@ public class Main {
 		frame.setVisible(true);
 		frame.pack();
 		gameScreen.requestFocus();
-		//aaaaa
 		while(true){
 			try {
 				Thread.sleep(20);
