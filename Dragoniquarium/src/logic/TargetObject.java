@@ -12,7 +12,7 @@ public abstract class TargetObject implements IRenderable{
 	protected int z;
 	protected int radius;
 	protected boolean destroyed = false;
-//	protected int xSpeed, ySpeed = 0;
+	protected double xSpeed, ySpeed = 0;
 //	protected int movingType;
 	// 1 is normal, 2 is vertical only, 3 is horizontal only
 	

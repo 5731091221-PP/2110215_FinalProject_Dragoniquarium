@@ -6,6 +6,8 @@ public abstract class DamageableObject extends TargetObject {
 	protected int defense;
 	protected double speed;
 	
+	private boolean movingIn;
+	
 	protected int state;
 	/*
 	 * state 1 : normal move
@@ -21,13 +23,17 @@ public abstract class DamageableObject extends TargetObject {
 	 * movingType 2 for ground only units
 	*/
 	
-	// bigger = more edgier, hectic
-	protected static double MAX_WANDER_OFFSET = 0.1; // 0.3
-	// bigger = faster turns
-	protected static double MAX_WANDER_RADIUS = 3.0; // 3.5
+	private boolean isLeft;
 	
-	protected double wanderTheta;
-	protected double wanderRadius;
+	private int tickCountX = 0;
+	
+	private int tickCountY = 0;
+	private double speedAddY = 0;
+	private double targetSpeedY = 0;
+	private boolean stable = false;
+	private boolean speedRisingY = false;
+	private int risingTickY = 0;
+	private int tickNeedY = 0;
 	
 	public DamageableObject(int x,int y, int radius, int z, int movingType, int life, int defense) {
 		super(x, y, radius, z);
@@ -35,62 +41,78 @@ public abstract class DamageableObject extends TargetObject {
 		this.movingType = movingType;
 		this.life = life;
 		this.defense = defense;
+		
+		this.isLeft = RandomUtility.random(0, 1) == 0 ? true : false;
 		this.state = 1;
-//		generateMovingDestination(x, y);
+		this.movingIn = true;
 		generateFirstDestination();
 		this.speed = RandomUtility.random(0.005, 0.05);
-//		System.out.println(speed);
-		
-		
-		wanderTheta = Math.random() * 2.0 * Math.PI;
-		wanderRadius = Math.random() * MAX_WANDER_RADIUS;
+			
 	}
 	
 	@Override
 	public void move() {
 		if(destroyed) return;
-//		if(contains(xDestination,yDestination)) {
-//			reachDestination();
-//			return ;
-//		}
-//		System.out.println(speed);
+		if(contains(xDestination,yDestination)) {
+			movingIn = false;
+			reachDestination();
+			return ;
+		}
+		if(movingIn) {
+			
+			x += (xDestination - x) * speed;
+			y += (yDestination - y) * speed;
+			
+			return ;
+		}
 		
 		
-		double wander_offset = Math.random()*2.0*MAX_WANDER_OFFSET - MAX_WANDER_OFFSET;
-		wanderTheta += wander_offset;
-		   
-		x += Math.cos(wanderTheta);
-		y += Math.sin(wanderTheta);
+		if(tickCountY == tickNeedY) {
+			targetSpeedY = RandomUtility.random(-3.0, 3.0);
+			risingTickY = RandomUtility.random(50, 100);
+			tickNeedY = 2*risingTickY + RandomUtility.random(50, 100);
+			speedAddY = targetSpeedY/risingTickY;
+			
+			speedRisingY = true;
+			stable = false;
+			tickCountY = 0;
+		}
+		tickCountY++;
+		
+		if(tickCountY > 2*risingTickY) {
+			stable = true;
+		} else if (tickCountY > risingTickY) {
+			speedRisingY = false;
+		}
+		
+		if(stable) {
+			if(speedAddY > 0) {
+				ySpeed = 0.2;
+			} else {
+				ySpeed = -0.2;
+			}
+		} else if (speedRisingY){
+			ySpeed += speedAddY;
+		} else {
+			ySpeed -= speedAddY;
+		}
+		
+		System.out.println(ySpeed + " " + speedAddY);
+		y += ySpeed;
 		
 		if(x<20) {
 			x = 20;
-			wanderTheta += 4.0 * wander_offset; //Math.PI;
-		}
-		if( x >1000) {
+		} else if( x > 1000) {
 			x = 1000;
-			wanderTheta += 4.0 * wander_offset; //Math.PI;
-		}
-		if(y<100) {
-			y = 100;
-			wanderTheta += 4.0 * wander_offset; //Math.PI;
-		}
-		if( y > 550) {
-			y = 550;
-			wanderTheta += 4.0 * wander_offset; //Math.PI;
 		}
 		
-/*		int moveX, moveY;
-		moveX = (int) ((xDestination - x) * speed);
-		moveY = (int) ((yDestination - y) * speed);
-		if(moveX == 0) {
-			moveX = xDestination > x ? 1:-1;
+		if(y < 20) {
+			if(tickCountY < 2*risingTickY) tickCountY = 2*risingTickY;
+			y = 20;
+		} else if( y > 580) {
+			if(tickCountY < 2*risingTickY) tickCountY = 2*risingTickY;
+			y = 580;
 		}
-		if(moveY == 0) {
-			moveY = yDestination > y ? 1:-1;
-		}
-		x += moveX;
-		y += moveY;*/
-		
 		
 	}
 	
