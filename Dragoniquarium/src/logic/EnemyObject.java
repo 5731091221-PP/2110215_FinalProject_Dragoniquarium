@@ -1,18 +1,16 @@
 package logic;
 
 import java.awt.Graphics2D;
+import java.util.List;
 
-public abstract class EnemyObject extends DamageableObject {
-
-	
+public abstract class EnemyObject extends DamageableObject {	
 	
 	public EnemyObject(int x, int y, int radius, int z, int movingType,
-			int life, int defense) {
+			int life, int defense, int attackDelay) {
 		super(x, y, radius, z, movingType, life, defense);
-		// TODO Auto-generated constructor stub
 	}
 
-	abstract void attack();
+	abstract void attack(List <AttackObject> onScreenAttack, int zCounter);
 	
 	public void isChased(double xClick, double yClick) {
 		

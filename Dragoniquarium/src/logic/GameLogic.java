@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
+
 //import lib.DrawingUtility;
 import input.InputUtility;
 import render.RenderableHolder;
@@ -69,6 +70,12 @@ public class GameLogic {
 		// move
 		for(TargetObject obj : onScreenObject) {
 			obj.move();
+			enemyOnScreen = false;
+			if(obj instanceof EnemyObject) {
+//				enemyOnScreen = true;
+				((EnemyObject)obj).attack(onScreenAttack, zCounter);
+			}
+			
 			// check out of screen
 			if (obj.x < 0 || obj.x > 1024 || obj.y < 0 || obj.y >= 900 ) {
 				obj.destroyed = true;
@@ -104,11 +111,16 @@ public class GameLogic {
 				}
 				
 			} else if(obj.attackType == 2) {
-				
-				if( enemy.contains(obj.x, obj.y)) {
+				for(TargetObject target : onScreenObject) {
+					if(target.destroyed ) continue;
+					if(target instanceof EnemyObject && target.contains(obj.x, obj.y)) {
+						((DamageableObject)target).hit(obj.getAttack());
+					}
+				}
+				/*if( enemy.contains(obj.x, obj.y)) {
 					// TODO
 					obj.destroyed = true;
-				}
+				}*/
 			}
 		}
 		
@@ -133,6 +145,7 @@ public class GameLogic {
 				}
 				else if(target instanceof EnemyObject) {
 					((EnemyObject)target).isChased(InputUtility.getMouseX(), InputUtility.getMouseY());
+					((EnemyObject)target).hit(1);
 					// target instance of Monster
 				}
 				
@@ -163,11 +176,14 @@ public class GameLogic {
 		if (spawnDelayCounter >= SPAWN_DELAY ) {
 			spawnDelayCounter = 0;
 //			TargetObject egg = new Egg1(RandomUtility.random(0, 1000), 600, 10);
-			TargetObject egg = new Dragon1(RandomUtility.random(300, 700), 0, 10);
+			TargetObject egg = new Dragon1(RandomUtility.random(300, 700), 0, zCounter);
 			onScreenObject.add(egg);
 			RenderableHolder.getInstance().add(egg);
 		}
-		
+		zCounter++;
+		if(zCounter == Integer.MAX_VALUE-1){
+			zCounter = Integer.MIN_VALUE+1;
+		}
 	}
 	
 	private TargetObject getTopMostTargetAt(int x,int y){
