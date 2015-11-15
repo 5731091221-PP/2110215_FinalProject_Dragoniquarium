@@ -10,6 +10,7 @@ public abstract class DamageableObject extends TargetObject {
 	protected boolean hasDestination;
 	
 	protected int state;
+	protected int stateTime;
 	/*
 	 * state 1 : normal move
 	 * state 2 : idle
@@ -53,7 +54,7 @@ public abstract class DamageableObject extends TargetObject {
 		this.state = 1;
 //		this.movingIn = true;
 		generateFirstDestination();
-		this.speed = RandomUtility.random(0.005, 0.05);
+		this.speed = RandomUtility.random(0.03, 0.07);
 			
 	}
 	
@@ -63,17 +64,15 @@ public abstract class DamageableObject extends TargetObject {
 		this.yDestination = yDes;
 	}
 	
+	protected abstract void performStateAction();
+	
 	@Override
 	public void move() {
 		if(destroyed) return;
-		/*if(movingIn) {
-			
-			x += (xDestination - x) * speed;
-			y += (yDestination - y) * speed;
-			
+		if(GameLogic.enamyOnScreen) {
+			performStateAction();
 			return ;
 		}
-		*/
 		if(hasDestination) {
 			if(contains(xDestination,yDestination)) {
 //				movingIn = false;
@@ -82,10 +81,20 @@ public abstract class DamageableObject extends TargetObject {
 				return ;
 			}
 			
+//			x += (xDestination - x)/ Math.hypot(xDestination - x, yDestination - y) * speed;
 			x += (xDestination - x) * speed;
 			y += (yDestination - y) * speed;
 			return ;
 		}
+		
+	/*	if(this instanceof Dragon1) {
+			if(state == 1) {
+				stateTime--;
+				if(stateTime == 0) {
+					state = 3;
+				}
+			}
+		}*/
 		
 		
 		if( movingType == 1) {
@@ -96,7 +105,7 @@ public abstract class DamageableObject extends TargetObject {
 		
 	}
 	
-	private void calculateXaxis(){
+	protected void calculateXaxis(){
 		
 		if(tickCountX == tickNeedX) {
 			if(isLeft) {
@@ -143,7 +152,7 @@ public abstract class DamageableObject extends TargetObject {
 		}
 	}
 	
-	private void calculateYaxis(){
+	protected void calculateYaxis(){
 		
 		if(tickCountY == tickNeedY) {
 			targetSpeedY = RandomUtility.random(-2.0, 2.0);
