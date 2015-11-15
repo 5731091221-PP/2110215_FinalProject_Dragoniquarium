@@ -2,7 +2,6 @@ package logic;
 
 import java.awt.Graphics2D;
 
-import render.RenderableHolder;
 import render.Resource;
 
 public class Dragon1 extends DamageableObject {
@@ -19,7 +18,7 @@ public class Dragon1 extends DamageableObject {
 	public void move() {
 		if(destroyed) return;
 		
-		if(GameLogic.enamyOnScreen) {
+		if(GameLogic.enemyOnScreen) {
 			performStateAction();
 			return ;
 		}
