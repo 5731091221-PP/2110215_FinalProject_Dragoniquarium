@@ -20,7 +20,7 @@ public class GameLogic {
 	private int spawnDelayCounter ;
 	
 	public static boolean enemyOnScreen = false; 
-	public DamageableObject enemy ; //MonsterObject
+	public EnemyObject enemy ; //MonsterObject
 	
 	public static GameLogic getInstance() {
 		return instance;
@@ -86,7 +86,7 @@ public class GameLogic {
 			} // else if( obj instanceof)
 		}
 		
-		// attack object do damage
+		// attack objects do damage
 		for(AttackObject obj : onScreenAttack) {
 			obj.move();
 			if(obj.attackType == 1) {
@@ -123,15 +123,19 @@ public class GameLogic {
 			}
 			
 			target = getTopMostTargetAt(InputUtility.getMouseX(), InputUtility.getMouseY());
-			if(target != null){
+			if(target != null && shoot ){
 				
-				if(target instanceof CollectibleObject && shoot)	{
+				if(target instanceof CollectibleObject)	{
 					((CollectibleObject)target).grab(player);
 				}
-				else if(target instanceof AttackObject && shoot) {
+				else if(target instanceof AttackObject) {
 					((AttackObject)target).hitByPlayer();
 				}
-				//else if(  ) // target insance of Monster
+				else if(target instanceof EnemyObject) {
+					System.out.println("hello");
+					((EnemyObject)target).isChased(InputUtility.getMouseX(), InputUtility.getMouseY());
+					// target instance of Monster
+				}
 				
 			} else if (enemyOnScreen && shoot) {
 				// shoot animation
@@ -151,6 +155,11 @@ public class GameLogic {
 										zCounter, 1, RandomUtility.random(300, 700), 600, 3, 1);
 			onScreenAttack.add(atk);
 			RenderableHolder.getInstance().add(atk);
+		}
+		if (spawnDelayCounter >= SPAWN_DELAY ) {
+			TargetObject newEnemy = new Enemy1(500, 300, 30, zCounter);
+			onScreenObject.add(newEnemy);
+			RenderableHolder.getInstance().add(newEnemy);
 		}
 		if (spawnDelayCounter >= SPAWN_DELAY ) {
 			spawnDelayCounter = 0;
@@ -186,7 +195,7 @@ public class GameLogic {
 		}
 		// find egg
 		for(TargetObject target : onScreenObject){
-			if(target instanceof Egg1 && target.contains(x, y)){
+			if(/*target instanceof Egg1 &&*/ target.contains(x, y)){
 				if(obj != null){
 					if(target.getZ() > obj.getZ()){
 						obj.setPointerOver(false);

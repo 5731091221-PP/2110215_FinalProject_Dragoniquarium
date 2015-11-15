@@ -6,6 +6,11 @@ public abstract class DamageableObject extends TargetObject {
 	protected int defense;
 	protected double speed;
 	
+	public int topBorder = 20;
+	public int bottomBorder = 580;
+	public int rightBorder = 1000;
+	public int leftBorder = 20;
+	
 //	private boolean movingIn;
 	protected boolean hasDestination;
 	
@@ -23,25 +28,26 @@ public abstract class DamageableObject extends TargetObject {
 	/*
 	 * movingType 1 for flying units
 	 * movingType 2 for ground only units
+	 * movingType 3 for Enemy
 	*/
 	
-	private boolean isLeft;
+	public boolean isLeft;
 	
-	private int tickCountX = 0;
-	private double speedAddX = 0;
-	private double targetSpeedX = 0;
-	private boolean stableX = false;
-	private boolean speedRisingX = false;
-	private int risingTickX = 0;
-	private int tickNeedX = 0;
+	protected int tickCountX = 0;
+	protected double speedAddX = 0;
+	protected double targetSpeedX = 0;
+	protected boolean stableX = false;
+	protected boolean speedRisingX = false;
+	protected int risingTickX = 0;
+	protected int tickNeedX = 0;
 	
-	private int tickCountY = 0;
-	private double speedAddY = 0;
-	private double targetSpeedY = 0;
-	private boolean stableY = false;
-	private boolean speedRisingY = false;
-	private int risingTickY = 0;
-	private int tickNeedY = 0;
+	protected int tickCountY = 0;
+	protected double speedAddY = 0;
+	protected double targetSpeedY = 0;
+	protected boolean stableY = false;
+	protected boolean speedRisingY = false;
+	protected int risingTickY = 0;
+	protected int tickNeedY = 0;
 	
 	public DamageableObject(int x,int y, int radius, int z, int movingType, int life, int defense) {
 		super(x, y, radius, z);
@@ -145,10 +151,10 @@ public abstract class DamageableObject extends TargetObject {
 		
 		x += xSpeed;
 		
-		if(x<20) {
-			x = 20;
-		} else if( x > 1000) {
-			x = 1000;
+		if(x<leftBorder) {
+			x = leftBorder;
+		} else if( x > rightBorder) {
+			x = rightBorder;
 		}
 	}
 	
