@@ -55,23 +55,6 @@ public abstract class TargetObject implements IRenderable{
 		this.isPointerOver = isPointerOver;
 	}
 	
-	
-	
-/*	public void move(){
-		if(destroyed) return;
-		
-		if(contains(xDestination,yDestination)) {
-			//TODO - generate new destination
-			reachDestination();
-		}
-		
-		x += xSpeed;
-		y += ySpeed;
-		// TODO - check out of screen
-		// TODO - how object create ?
-		// TODO - how object fade in ?
-
-	}*/
 
 	@Override
 	public int getZ() {
