@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		JFrame frame = new JFrame("Catch A Fruit");
+		JFrame frame = new JFrame("Dragoniquarium");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		GameLogic logic = new GameLogic();

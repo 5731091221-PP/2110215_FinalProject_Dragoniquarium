@@ -3,8 +3,6 @@ package logic;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import render.Resource;
-
 public class Egg1 extends CollectibleObject {
 	
 	public Egg1(int x, int y, int z) {

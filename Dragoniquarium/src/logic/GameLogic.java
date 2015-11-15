@@ -14,9 +14,20 @@ public class GameLogic {
 	private static final int SPAWN_DELAY = 100;
 	private int spawnDelayCounter ;
 	
+	public static boolean enamyOnScreen = false;
+	
 	public static GameLogic getInstance() {
 		return instance;
 	}
+	
+	/*
+	 * Reserved z
+	 * MIN_VALUE : background
+	 * MAX_VALUE-1 : animation effect
+	 * MAX_VALUE : player's status
+	 */
+	private static int zCounter = Integer.MIN_VALUE+1;
+	
 
 	public GameLogic() {
 //		player = new Player(); 
@@ -39,6 +50,16 @@ public class GameLogic {
 			}
 		}
 		
+		// lay Egg
+		for(TargetObject obj : onScreenObject) {
+			if( obj instanceof Dragon1 ) {
+				Dragon1 temp = (Dragon1)obj; 
+				if(temp.layingEgg) {
+					temp.layingEgg = false;
+					createEgg(temp.x, temp.y);
+				}
+			}
+		}
 		
 		for(TargetObject obj : onScreenObject) {
 			obj.move();
@@ -46,7 +67,9 @@ public class GameLogic {
 				obj.destroyed = true;
 			}
 		}
-		
+		// create egg
+		// attack
+		// update fire ball
 		spawnDelayCounter++;
 		if (spawnDelayCounter >= SPAWN_DELAY ) {
 			spawnDelayCounter = 0;
@@ -58,5 +81,10 @@ public class GameLogic {
 		
 	}
 	
+	public void createEgg(double x, double y) {
+		TargetObject egg = new Egg1((int)x, (int)y, zCounter);
+		onScreenObject.add(egg);
+		RenderableHolder.getInstance().add(egg);
+	}
 	
 }

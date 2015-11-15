@@ -7,6 +7,8 @@ import render.Resource;
 
 public class Dragon1 extends DamageableObject {
 	
+	public boolean layingEgg = false;
+	
 	public Dragon1(int x, int y, int z) {
 		super(x, y, 20, z, 2, 1, 0);
 		stateTime = 200;
@@ -42,7 +44,8 @@ public class Dragon1 extends DamageableObject {
 		} else if(state == 3) {
 			stateTime--;
 			if(stateTime == 0) {
-				layEgg();
+//				layEgg();
+				layingEgg = true;
 				state = 1;
 				stateTime = 500;
 			}
@@ -50,11 +53,6 @@ public class Dragon1 extends DamageableObject {
 		}
 		
 		calculateXaxis();
-	}
-	
-	public void layEgg() {
-//		System.out.println("lay Egg!!");
-		GameLogic.createEgg(x, y);
 	}
 	
 	@Override
