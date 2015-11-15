@@ -91,7 +91,7 @@ public class GameLogic {
 			obj.move();
 			if(obj.attackType == 1) {
 				for(TargetObject target : onScreenObject) {
-					if(target.destroyed) continue;
+					if(target.destroyed || target instanceof EnemyObject) continue;
 					if(target instanceof DamageableObject && target.contains(obj.x, obj.y)) {
 						((DamageableObject)target).hit(obj.getAttack());
 						
@@ -132,7 +132,6 @@ public class GameLogic {
 					((AttackObject)target).hitByPlayer();
 				}
 				else if(target instanceof EnemyObject) {
-					System.out.println("hello");
 					((EnemyObject)target).isChased(InputUtility.getMouseX(), InputUtility.getMouseY());
 					// target instance of Monster
 				}

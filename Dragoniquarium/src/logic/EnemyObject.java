@@ -16,7 +16,6 @@ public abstract class EnemyObject extends DamageableObject {
 	
 	public void isChased(double xClick, double yClick) {
 		
-		System.out.println("isChased");
 //		targetSpeedY = (y - yClick)/ Math.hypot(x - xClick, y - yClick) * 4;
 		ySpeed = (y - yClick)/ Math.hypot(x - xClick, y - yClick) * 4;
 		risingTickY = 50;
@@ -36,6 +35,11 @@ public abstract class EnemyObject extends DamageableObject {
 		speedRisingX = false;
 		stableX = false;
 		tickCountX = 0;
+		if(speedAddX > 0) {
+			isLeft = false;
+		} else {
+			isLeft = true;
+		}
 		
 	}
 	
