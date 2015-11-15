@@ -28,6 +28,7 @@ public class Main {
 			}
 			gameScreen.repaint();
 			logic.logicUpdate();
+			input.InputUtility.postUpdate();
 		}
 	}
 
