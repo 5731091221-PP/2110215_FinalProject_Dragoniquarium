@@ -69,7 +69,7 @@ public abstract class DamageableObject extends TargetObject {
 	@Override
 	public void move() {
 		if(destroyed) return;
-		if(GameLogic.enamyOnScreen) {
+		if(GameLogic.enemyOnScreen) {
 			performStateAction();
 			return ;
 		}
@@ -205,9 +205,9 @@ public abstract class DamageableObject extends TargetObject {
 		hasDestination = true;
 	}
 	
-	private void generateSpeed() {
-		// TODO
-	}
+//	private void generateSpeed() {
+//		// TODO
+//	}
 
 	@Override
 	public void generateMovingDestination(double curX, double curY) {
@@ -231,8 +231,13 @@ public abstract class DamageableObject extends TargetObject {
 		
 	}
 	
-	public void hit() {
+	public void hit(int damage) {
 		//TODO
+		damage = Math.max(damage-defense, 1);
+		life -= damage;
+		if(life <= 0) {
+			destroyed = true;
+		}
 	}
 	
 }
