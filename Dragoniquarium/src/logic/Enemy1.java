@@ -8,7 +8,7 @@ import render.RenderableHolder;
 public class Enemy1 extends EnemyObject {
 
 	private int attackTickCount = 0;
-	private int attackDelay = 100;
+	private int attackDelay = 1000;
 	
 	public Enemy1(int x, int y, int radius, int z) {
 		super(x, y, radius, z, 1, 20, 0, 100);
