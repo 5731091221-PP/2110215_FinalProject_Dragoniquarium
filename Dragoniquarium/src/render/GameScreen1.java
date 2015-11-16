@@ -21,7 +21,7 @@ public class GameScreen1 extends JComponent{
 	public GameScreen1() {
 		super();
 		setDoubleBuffered(true);
-		setPreferredSize(new Dimension(1024, 640));
+		setPreferredSize(new Dimension(1280, 700));
 		setVisible(true);
 		
 		addListener();
@@ -102,7 +102,10 @@ public class GameScreen1 extends JComponent{
 		
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setBackground(Color.WHITE);
-		g2d.clearRect(0, 0, 1024, 640);
+		g2d.clearRect(0, 0, 1280, 700);
+		
+		// draw background
+		g2d.drawImage(DrawingUtility.bg, null, 0, 0);
 		
 		//Preventing thread interference
 		synchronized(RenderableHolder.getInstance()){
