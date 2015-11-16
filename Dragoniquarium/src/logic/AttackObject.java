@@ -16,6 +16,11 @@ public class AttackObject extends TargetObject {
 	 * type 2 : monster to dragon
 	 */
 	
+	public int topBorder = 20;
+	public int bottomBorder = 580;
+	public int rightBorder = 1000;
+	public int leftBorder = 100;
+	
 	public AttackObject(double x, double y, int radius, int z, int attack, 
 			double xDes, double yDes, double speed, int attackType) {
 		super(x, y, radius, z);
@@ -47,7 +52,7 @@ public class AttackObject extends TargetObject {
 	public void move() {
 		x += xSpeed;
 		y += ySpeed;
-		if(x > 1024 || x < 0 || y < 0 || y > 600) {
+		if(x > rightBorder || x < leftBorder || y < topBorder || y > bottomBorder) {
 			destroyed = true;
 		}
 	}

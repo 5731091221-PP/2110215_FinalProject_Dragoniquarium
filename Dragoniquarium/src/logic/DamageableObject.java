@@ -9,7 +9,7 @@ public abstract class DamageableObject extends TargetObject {
 	public int topBorder = 20;
 	public int bottomBorder = 580;
 	public int rightBorder = 1000;
-	public int leftBorder = 20;
+	public int leftBorder = 100;
 	
 //	private boolean movingIn;
 	protected boolean hasDestination;
