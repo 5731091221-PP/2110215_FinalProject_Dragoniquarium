@@ -16,7 +16,7 @@ public class PlayerStatus implements IRenderable{
 	}
 	
 	public boolean isDisplayingArea(int x,int y){
-		return y < 40;
+		return x < 50;
 	}
 	
 	public void addEgg(int a) {

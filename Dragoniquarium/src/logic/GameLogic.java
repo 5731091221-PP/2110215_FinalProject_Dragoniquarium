@@ -1,8 +1,10 @@
 package logic;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 
 
 
@@ -16,6 +18,7 @@ public class GameLogic {
 	private PlayerStatus player;
 	protected List <TargetObject> onScreenObject =  new CopyOnWriteArrayList<TargetObject>();
 	protected List <AttackObject> onScreenAttack = new CopyOnWriteArrayList<AttackObject>();
+	protected List <Button> onScreenButton = new ArrayList<Button>();
 	
 	private static final int SPAWN_DELAY = 100;
 	private int spawnDelayCounter ;
@@ -41,6 +44,9 @@ public class GameLogic {
 //		playerStatus = new PlayerStatus();
 //		RenderableHolder.getInstance().add(player);
 //		RenderableHolder.getInstance().add(playerStatus);
+		Button button = new Button(1, 30, 500, 30, 30, Integer.MAX_VALUE);
+		onScreenButton.add(button);
+		RenderableHolder.getInstance().add(button);
 		spawnDelayCounter = 0;
 		
 	}
@@ -159,6 +165,18 @@ public class GameLogic {
 		// dragon attack
 		// update fire ball
 		
+		// push button
+		Button targetButton = null;
+		boolean click = false;
+		if(input.InputUtility.isMouseLeftClicked() ){
+			click = true;
+		}
+		
+		targetButton = getButtonAt(InputUtility.getMouseX(), InputUtility.getMouseY());
+		if(targetButton != null && click ){
+			targetButton.click(onScreenObject, zCounter);
+		}
+		
 		
 		
 		spawnDelayCounter++;
@@ -184,6 +202,20 @@ public class GameLogic {
 		if(zCounter == Integer.MAX_VALUE-1){
 			zCounter = Integer.MIN_VALUE+1;
 		}
+	}
+	
+	private Button getButtonAt(int x, int y) {
+		Button but = null;
+		for(Button target : onScreenButton) {
+			if(target.contains(x, y)) {
+				but = target;
+				but.setPointerOver(true);
+				break;
+			}else{
+				target.setPointerOver(false);
+			}
+		}
+		return but;
 	}
 	
 	private TargetObject getTopMostTargetAt(int x,int y){
