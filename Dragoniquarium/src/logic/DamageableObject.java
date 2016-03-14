@@ -6,10 +6,10 @@ public abstract class DamageableObject extends TargetObject {
 	protected int defense;
 	protected double speed;
 	
-	public int topBorder = 20;
-	public int bottomBorder = 580;
-	public int rightBorder = 1000;
-	public int leftBorder = 100;
+	public int topBorder = 120;
+	public int bottomBorder = 650;
+	public int rightBorder = 1220;
+	public int leftBorder = 260;
 	
 //	private boolean movingIn;
 	protected boolean hasDestination;
@@ -30,7 +30,6 @@ public abstract class DamageableObject extends TargetObject {
 	 * movingType 2 for ground only units
 	 * movingType 3 for Enemy
 	*/
-	
 	public boolean isLeft;
 	
 	protected int tickCountX = 0;
@@ -51,17 +50,15 @@ public abstract class DamageableObject extends TargetObject {
 	
 	public DamageableObject(int x,int y, int radius, int z, int movingType, int life, int defense) {
 		super(x, y, radius, z);
-		// TODO Auto-generated constructor stub
 		this.movingType = movingType;
 		this.life = life;
 		this.defense = defense;
 		
 		this.isLeft = RandomUtility.random(0, 1) == 0 ? true : false;
 		this.state = 1;
-//		this.movingIn = true;
 		generateFirstDestination();
 		this.speed = RandomUtility.random(0.03, 0.07);
-			
+		
 	}
 	
 	public void setDestination(double xDes, double yDes) {
@@ -70,50 +67,26 @@ public abstract class DamageableObject extends TargetObject {
 		this.yDestination = yDes;
 	}
 	
-	protected abstract void performStateAction();
+//	protected abstract void performStateAction();
 	
-	@Override
-	public void move() {
-		if(destroyed) return;
-		if(GameLogic.enemyOnScreen) {
-			performStateAction();
-			return ;
-		}
-		if(hasDestination) {
-			if(contains(xDestination,yDestination)) {
-//				movingIn = false;
-				hasDestination = false;
-				reachDestination();
-				return ;
-			}
-			
-//			x += (xDestination - x)/ Math.hypot(xDestination - x, yDestination - y) * speed;
-			x += (xDestination - x) * speed;
-			y += (yDestination - y) * speed;
+	protected void moveIn() {
+		if(contains(xDestination,yDestination)) {
+			hasDestination = false;
+			reachDestination();
 			return ;
 		}
 		
-	/*	if(this instanceof Dragon1) {
-			if(state == 1) {
-				stateTime--;
-				if(stateTime == 0) {
-					state = 3;
-				}
-			}
-		}*/
-		
-		
-		if( movingType == 1) {
-			calculateYaxis();
-		}
-		
-		calculateXaxis();
-		
+		x += (xDestination - x) * speed;
+		y += (yDestination - y) * speed;
 	}
 	
 	protected void calculateXaxis(){
 		
 		if(tickCountX == tickNeedX) {
+			if(tickNeedX != 0) {
+				isLeft = !isLeft;
+			}
+			
 			if(isLeft) {
 				targetSpeedX = RandomUtility.random(-4.0, -1.5);
 			} else {
@@ -127,10 +100,10 @@ public abstract class DamageableObject extends TargetObject {
 			speedRisingX = true;
 			stableX = false;
 			tickCountX = 0;
-			isLeft = !isLeft;
+			
 		}
 		tickCountX++;
-		
+
 		if(tickCountX > 2*risingTickX) {
 			stableX = true;
 		} else if (tickCountX > risingTickX) {
@@ -191,34 +164,31 @@ public abstract class DamageableObject extends TargetObject {
 		}
 		
 		y += ySpeed;
-		if(y < 20) {
+		if(y < topBorder) {
 			if(tickCountY < 2*risingTickY) tickCountY = 2*risingTickY;
-			y = 20;
-		} else if( y > 580) {
+			y = topBorder;
+		} else if(movingType == 1 && y > bottomBorder - 100) {
 			if(tickCountY < 2*risingTickY) tickCountY = 2*risingTickY;
-			y = 580;
+			y = bottomBorder - 100;
+		} else if( y > bottomBorder) {
+			if(tickCountY < 2*risingTickY) tickCountY = 2*risingTickY;
+			y = bottomBorder ;
 		}
 	}
 	
 	private void generateFirstDestination() {
 		if(movingType == 1) {
-			xDestination = RandomUtility.random(200, 800);
+			xDestination = RandomUtility.random(300, 800);
 			yDestination = RandomUtility.random(150, 500);
 		} else if(movingType == 2) {
-			xDestination = RandomUtility.random(100, 900);
-			yDestination = 560;
+			xDestination = RandomUtility.random(leftBorder+radius, rightBorder-radius);
+			yDestination = bottomBorder;
 		}
 		hasDestination = true;
 	}
 	
-//	private void generateSpeed() {
-//		// TODO
-//	}
-
 	@Override
 	public void generateMovingDestination(double curX, double curY) {
-		// TODO check start and end point
-//		this.speed = RandomUtility.random(0.005, 0.05);
 		if (movingType == 1) {
 			xDestination = RandomUtility.random(Math.max(30, curX-200),Math.min(990, curX+200));
 			yDestination = RandomUtility.random(Math.max(40, curY-100), Math.min(500, curY+100));
@@ -232,14 +202,10 @@ public abstract class DamageableObject extends TargetObject {
 
 	@Override
 	public void reachDestination() {
-		// TODO Auto-generated method stub
-//		generateMovingDestination(x, y);
-		
 	}
 	
 	public void hit(int damage) {
-		//TODO
-		damage = Math.max(damage-defense, 1);
+		damage = Math.max(damage-defense, 0);
 		life -= damage;
 		if(life <= 0) {
 			destroyed = true;

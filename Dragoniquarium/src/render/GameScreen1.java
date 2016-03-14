@@ -4,6 +4,7 @@ import input.InputUtility;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
@@ -13,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 
 public class GameScreen1 extends JComponent{
 
@@ -25,6 +27,8 @@ public class GameScreen1 extends JComponent{
 		setVisible(true);
 		
 		addListener();
+		this.add(new PauseButton(1218, 0));
+		UIManager.put("OptionPane.messageFont", new Font("Monospaced", Font.PLAIN, 15));
 	}
 	
 	private void addListener(){
@@ -106,19 +110,26 @@ public class GameScreen1 extends JComponent{
 		
 		// draw background
 		g2d.drawImage(DrawingUtility.bg, null, 0, 0);
-		
+		g2d.drawImage(DrawingUtility.ui, null, 0, 0);
 		//Preventing thread interference
 		synchronized(RenderableHolder.getInstance()){
 			for(IRenderable entity : RenderableHolder.getInstance().getRenderableList()){
-//				System.out.println(entity.getZ());
 				if(entity.isVisible()){
 					entity.draw(g2d);
 				}
 			}
 			
 		}
-//		System.out.println("-----");
 		
+		synchronized(RenderableHolder.getInstance()){
+			for(GameAnimation anim : RenderableHolder.getInstance().getAnimationList()){
+				if(anim.isPlaying()){
+					anim.draw(g2d);
+				}
+			}
+		}
+		g2d.drawImage(DrawingUtility.grass, null, 0, 0);
+		g2d.drawImage(DrawingUtility.lightRay, null, 0, 0);
 	}
 	
 	

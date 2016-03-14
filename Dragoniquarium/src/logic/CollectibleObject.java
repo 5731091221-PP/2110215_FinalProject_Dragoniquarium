@@ -1,6 +1,6 @@
 package logic;
 
-//import lib.AudioUtility;
+import java.awt.AlphaComposite;
 
 public abstract class CollectibleObject extends TargetObject{
 	
@@ -8,6 +8,8 @@ public abstract class CollectibleObject extends TargetObject{
 	protected int reward;
 	protected int timeSpent = 300;
 	protected boolean movingUp;
+	
+	protected static final AlphaComposite transcluentWhite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
 	
 	public CollectibleObject(double x, double y, int radius, int z, int reward) {
 		super(x, y, radius, z);
@@ -18,25 +20,12 @@ public abstract class CollectibleObject extends TargetObject{
 	
 	@Override
 	public void generateMovingDestination(double curX, double curY) {
-//		System.out.println("In generate x = " + curX + " y = " + curY);
 		if(movingUp) {
 			xDestination = curX;
 			yDestination = RandomUtility.random(200, 202);
 		} else {
 			yDestination = 800;
 		}
-//		int timeSpent = 10;
-//		xSpeed = (xDestination - curX)/timeSpent;
-//		ySpeed = (yDestination - curY)/timeSpent;
-//		if (xSpeed == 0) {
-//			if(xDestination > curX) xSpeed = 1;
-//			else if (xDestination < curX) xSpeed = -1;
-//		}
-//		if (ySpeed == 0) {
-//			if (yDestination > curY) ySpeed = 1;
-//			else if(yDestination < curY) ySpeed = -1;
-//		}
-//		
 	}
 	
 	@Override
@@ -55,9 +44,9 @@ public abstract class CollectibleObject extends TargetObject{
 	}
 	
 	public void grab(PlayerStatus player){
-		if(destroyed) return;
-		
-//		AudioUtility.playSound("collect");
+		if(destroyed) {
+			return;
+		}
 		collect(player);
 		destroyed = true;
 	}

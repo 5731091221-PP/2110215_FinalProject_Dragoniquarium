@@ -1,10 +1,8 @@
 package logic;
 
-import java.awt.Graphics2D;
+import java.awt.AlphaComposite;
 
 import render.IRenderable;
-//import lib.ConfigurableOption;
-import logic.RandomUtility;;
 
 public abstract class TargetObject implements IRenderable{
 
@@ -13,13 +11,13 @@ public abstract class TargetObject implements IRenderable{
 	protected int radius;
 	protected boolean destroyed = false;
 	protected double xSpeed, ySpeed = 0;
-//	protected int movingType;
-	// 1 is normal, 2 is vertical only, 3 is horizontal only
+	// 1 is normal, 2 is vertical only
 	
 	protected double xDestination;
 	protected double yDestination;
-//	protected int xDistance;
-//	protected int yDistance;
+	
+	protected static final AlphaComposite transcluentWhite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+	protected static final AlphaComposite opaque = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1);
 	
 	protected boolean isPointerOver = false;
 
@@ -31,15 +29,6 @@ public abstract class TargetObject implements IRenderable{
 		this.y = y;
 		this.z = z;
 		this.radius = radius;
-//		this.xSpeed = xSpeed;
-//		this.ySpeed = ySpeed;
-//		this.movingType = movingType;
-		
-		//TODO - generate first destination - maybe in subclass
-		//TODO - how to fade in ?
-		
-//		this.x = movingParameter[0];
-//		this.y = movingParameter[1];
 		
 	}
 	
@@ -49,6 +38,10 @@ public abstract class TargetObject implements IRenderable{
 	
 	public boolean contains(double x, double y){
 		return Math.hypot(x-this.x, y-this.y) <= radius+6;
+	}
+	
+	public boolean contains(double x, double y, double radius){
+		return Math.hypot(x-this.x, y-this.y) <= this.radius+radius+6;
 	}
 	
 	public void setPointerOver(boolean isPointerOver) {

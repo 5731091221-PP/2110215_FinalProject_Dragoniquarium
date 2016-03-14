@@ -9,6 +9,7 @@ public class RenderableHolder {
 	
 	private static final RenderableHolder instance = new RenderableHolder();
 	private List<IRenderable> entities = new CopyOnWriteArrayList<IRenderable>();
+	private List<GameAnimation> animation = new CopyOnWriteArrayList<GameAnimation>();
 	
 	public static RenderableHolder getInstance() {
 		return instance;
@@ -18,6 +19,10 @@ public class RenderableHolder {
 		super();
 	}
 	
+	public void clear() {
+		entities.clear();
+		animation.clear();
+	}
 	public void add(IRenderable obj) {
 		entities.add(obj);
 		Collections.sort(entities, new Comparator<IRenderable>() {
@@ -31,7 +36,15 @@ public class RenderableHolder {
 		
 	}
 	
+	public void add(GameAnimation anim) {
+		animation.add(anim);
+	}
+	
 	public List<IRenderable> getRenderableList() {
 		return entities;
+	}
+	
+	public List<GameAnimation> getAnimationList() {
+		return animation;
 	}
 }
